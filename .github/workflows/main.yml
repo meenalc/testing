@@ -55,4 +55,4 @@ jobs:
             github.projects.addProjectCard({
               card_id: context.payload.issue.id,
               project_id: 6 # Replace with your project ID
-            })
+            });
