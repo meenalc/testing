@@ -1,0 +1,38 @@
+name: Assign Project on Creation
+
+on:
+  issues:
+    types: [opened]
+  # pull_request:
+  #   types: [opened]
+
+jobs:
+  assign-project:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Assign to Project
+      uses: actions/github-script@v6.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const projectId = '6'; // Replace with your project's ID
+          const columnName = 'To Triage'; // Replace with the name of your column
+
+          const issueOrPr = context.payload.issue || context.payload.pull_request;
+          if (!issueOrPr) return;
+
+          const { data: columns } = await github.rest.projects.listColumns({
+            project_id: projectId
+          });
+
+          const column = columns.find(col => col.name === columnName);
+          if (!column) {
+            throw new Error(`Column '${columnName}' not found in the project.`);
+          }
+
+          await github.rest.projects.createCard({
+            column_id: column.id,
+            content_id: issueOrPr.id,
+            content_type: 'Issue'
+          });
