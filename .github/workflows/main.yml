@@ -17,7 +17,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const projectId = '6'; // Replace with your project's ID
-          const columnName = 'To Triage'; // Replace with the name of your column
+          const columnName = 'To triage'; // Replace with the name of your column
 
           const issueOrPr = context.payload.issue || context.payload.pull_request;
           if (!issueOrPr) return;
